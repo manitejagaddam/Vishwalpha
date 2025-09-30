@@ -7,3 +7,4 @@ dotenv
 groq
 streamlit
 tesseract-ocr
+easyocr
