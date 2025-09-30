@@ -3,3 +3,4 @@ Pillow
 PyMuPDF
 openai
 pydantic
+dotenv

@@ -1,7 +1,12 @@
 import openai
 import json
-from ..models.pydantic import ExamAnalysis
+from models.pydantic import ExamAnalysis
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+client = openai.OpenAI(api_key=os.getenv("OPENAI_KEY"))  # v1 style client
 
 def analyze_with_llm(extracted_text: str) -> ExamAnalysis:
     prompt = f"""
@@ -21,13 +26,12 @@ Tasks:
 Return JSON output only. We'll validate and parse it in Python.
 """
 
-    # Call OSS 20B model (replace with your API config)
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="oai-oss-20b",
         messages=[{"role": "user", "content": prompt}]
     )
 
-    llm_output = response.choices[0].message["content"]
+    llm_output = response.choices[0].message.content
 
     try:
         data = json.loads(llm_output)
