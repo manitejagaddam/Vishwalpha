@@ -37,7 +37,39 @@ if uploaded_file is not None:
         try:
             raw_output = analyze_exam(temp_path, is_pdf)
             # cleaned_output = clean_llm_output(raw_output)
-            st.success("Analysis Complete  !")
-            st.text_area("LLM Output", value=raw_output, height=400)
+            # print(type(cleaned_output))
+            st.success("Analysis Complete  ! ")
+            # st.text_area("LLM Output", value=raw_output, height=400)
+            
+            for idx, q in enumerate(raw_output.questions, start=1):
+                st.subheader(f"Question {idx}")
+                st.markdown(f"**Question:** {q.question_text}")
+                st.markdown(f"**Answer:** {q.answer_text or 'No answer provided'}")
+                st.markdown(f"**Bloom's Taxonomy:** {q.blooms_level}")
+                st.markdown(f"**Score:** {q.score}")
+
+                if q.pros:
+                    st.markdown("**Pros:**")
+                    for pro in q.pros:
+                        st.markdown(f"- {pro}")
+
+                if q.cons:
+                    st.markdown("**Cons:**")
+                    for con in q.cons:
+                        st.markdown(f"- {con}")
+
+                if q.feedback:
+                    st.markdown(f"**Feedback:** {q.feedback}")
+
+                st.markdown("---")
+
+            # Overall strengths and weaknesses
+            st.subheader("Overall Strengths")
+            for s in raw_output.overall_analysis.strengths:
+                st.markdown(f"- {s}" if s else "No strengths identified.")
+
+            st.subheader("Overall Weaknesses")
+            for w in raw_output.overall_analysis.weaknesses:
+                st.markdown(f"- {w}" if w else "No weaknesses identified.")
         except Exception as e:
             st.error(f"Error analyzing the exam: {e}")

@@ -1,3 +1,4 @@
+import re
 import openai
 import json
 from openai import OpenAI
@@ -10,11 +11,14 @@ import streamlit as st
 
 load_dotenv()
 
+
+
+
 # client = openai.OpenAI(api_key=os.getenv("OPENAI_KEY"))  # v1 style client
 
 # api_key = os.getenv("OPENAI_KEY")
-# api_key = os.getenv("GROQ_KEY")
-api_key = st.secrets["GROQ_KEY"]
+api_key = os.getenv("GROQ_KEY")
+# api_key = st.secrets["GROQ_KEY"]
 if not api_key:
     raise ValueError("GROQ not found!")
 
@@ -23,6 +27,19 @@ if not api_key:
 
 # client = OpenAI(api_key=api_key)
 client = Groq(api_key=api_key)
+
+
+
+
+def clean_llm_output(raw_output: str) -> str:
+    # Remove ```json ... ``` code block markers
+    cleaned = re.sub(r"^```json\s*|\s*```$", "", raw_output.strip(), flags=re.MULTILINE)
+    # Extract the first valid JSON object
+    match = re.search(r"\{.*\}", cleaned, flags=re.DOTALL)
+    if match:
+        return match.group()
+    else:
+        raise ValueError("No valid JSON found in LLM output")
 
 def analyze_with_llm(extracted_text: str) -> ExamAnalysis:
     prompt = f"""
@@ -48,22 +65,27 @@ Return JSON output only. We'll validate and parse it in Python.
     )
 
     llm_output = response.choices[0].message.content
+    data = ""
     
     
 
     try:
-        print(llm_output)
-        return llm_output
+        # print(llm_output)
+        # return llm_output
+        cleaned_output = clean_llm_output(llm_output)
+        print(cleaned_output)
     
-        print("data is being loaded")
-        data = json.loads(llm_output)
-        print("data loaded")
+        print("data is being loaded currently raw")
+        data = json.loads(cleaned_output)
+        # data = json.loads(llm_output)
+        print(data)
+        print("data loaded sucessfully")
     
         # Convert JSON to match Pydantic fields
         questions = []
         for q in data["questions"]:
             questions.append({
-                "question_number": None,
+                "id": None,
                 "question_text": q.get("question", ""),
                 "answer_text": q.get("answer", ""),
                 "blooms_level": q.get("bloom_level", "Unknown"),
@@ -89,6 +111,7 @@ Return JSON output only. We'll validate and parse it in Python.
         print("data analysis completed")
         return exam_analysis
     except Exception as e:
-        print("Failed to parse LLM output:", e)
-        print("Raw output:", llm_output)
+        print(data)
+        print("Failed to parse LLM output   :", e)
+        # print("Raw output:", llm_output)
         return None
