@@ -1,4 +1,4 @@
-import tesseract
+import pytesseract
 from PIL import Image
 import fitz
 import json
