@@ -36,8 +36,6 @@ if uploaded_file is not None:
     with st.spinner("Analyzing exam paper..."):
         try:
             raw_output = analyze_exam(temp_path, is_pdf)
-            # cleaned_output = clean_llm_output(raw_output)
-            # print(type(cleaned_output))
             st.success("Analysis Complete  ! ")
             # st.text_area("LLM Output", value=raw_output, height=400)
             

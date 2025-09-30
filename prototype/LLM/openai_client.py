@@ -73,12 +73,12 @@ Return JSON output only. We'll validate and parse it in Python.
         # print(llm_output)
         # return llm_output
         cleaned_output = clean_llm_output(llm_output)
-        print(cleaned_output)
+        # print(cleaned_output)
     
         print("data is being loaded currently raw")
         data = json.loads(cleaned_output)
         # data = json.loads(llm_output)
-        print(data)
+        # print(data)
         print("data loaded sucessfully")
     
         # Convert JSON to match Pydantic fields
