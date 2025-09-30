@@ -1,20 +1,20 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 class QuestionAnalysis(BaseModel):
-    question_number: int
+    question_number: Optional[int] = None
     question_text: str
     answer_text: str
     blooms_level: str
-    score: int
-    pros: List[str]
-    cons: List[str]
-    feedback: str
+    score: int = 0
+    pros: List[str] = []
+    cons: List[str] = []
+    feedback: str = ""
 
 class OverallAnalysis(BaseModel):
-    strengths: List[str]
-    weaknesses: List[str]
-    final_feedback: str
+    strengths: List[str] = []
+    weaknesses: List[str] = []
+    final_feedback: str = ""
 
 class ExamAnalysis(BaseModel):
     questions: List[QuestionAnalysis]

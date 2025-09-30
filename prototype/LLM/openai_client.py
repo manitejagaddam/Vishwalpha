@@ -47,11 +47,46 @@ Return JSON output only. We'll validate and parse it in Python.
     )
 
     llm_output = response.choices[0].message.content
+    
+    
 
     try:
+        print(llm_output)
+        return llm_output
+    
+        print("data is being loaded")
         data = json.loads(llm_output)
-        analysis = ExamAnalysis(**data)
-        return analysis
+        print("data loaded")
+    
+        # Convert JSON to match Pydantic fields
+        questions = []
+        for q in data["questions"]:
+            questions.append({
+                "question_number": None,
+                "question_text": q.get("question", ""),
+                "answer_text": q.get("answer", ""),
+                "blooms_level": q.get("bloom_level", "Unknown"),
+                "score": q.get("score", 0),
+                "pros": q.get("pros", []),
+                "cons": q.get("cons", []),
+                "feedback": q.get("feedback", "")
+            })
+
+        # Transform overall analysis
+        summary = data.get("summary", {})
+        overall_analysis = {
+            "strengths": summary.get("overall_strengths", []),
+            "weaknesses": summary.get("overall_weaknesses", []),
+            "final_feedback": summary.get("notes", "")
+        }
+
+        
+        exam_analysis = ExamAnalysis(
+            questions=questions,
+            overall_analysis=overall_analysis
+        )
+        print("data analysis completed")
+        return exam_analysis
     except Exception as e:
         print("Failed to parse LLM output:", e)
         print("Raw output:", llm_output)
