@@ -6,4 +6,4 @@ pydantic
 dotenv
 groq
 streamlit
-tesseract
+tesseract-ocr
