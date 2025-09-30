@@ -6,14 +6,15 @@ import os
 from dotenv import load_dotenv
 
 from groq import Groq
-
+import streamlit as st
 
 load_dotenv()
 
 # client = openai.OpenAI(api_key=os.getenv("OPENAI_KEY"))  # v1 style client
 
 # api_key = os.getenv("OPENAI_KEY")
-api_key = os.getenv("GROQ_KEY")
+# api_key = os.getenv("GROQ_KEY")
+api_key = st.secrets["GROQ_KEY"]
 if not api_key:
     raise ValueError("GROQ not found!")
 
