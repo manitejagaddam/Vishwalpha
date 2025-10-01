@@ -21,7 +21,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
       </div>
       <div className="flex-1 space-y-1">
         <div className="font-medium text-sm text-slate-900">
-          {isUser ? 'You' : 'Vishwalpha Bot'}
+          {isUser ? 'You' : 'Alpha Bot'}
         </div>
         <div className="text-slate-700 leading-relaxed whitespace-pre-wrap">
           {message.content}

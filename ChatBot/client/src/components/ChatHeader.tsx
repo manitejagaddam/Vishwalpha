@@ -13,7 +13,7 @@ export default function ChatHeader({ onSettingsClick }: ChatHeaderProps) {
             <Bot className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-bold">Vishwalpha Bot</h1>
+            <h1 className="text-xl font-bold">Alpha Bot</h1>
             <p className="text-sm text-emerald-50">AI Assistant</p>
           </div>
         </div>
