@@ -6,6 +6,6 @@ export interface Message {
 }
 
 export interface ChatResponse {
-  response: string;
+  answer: string;
   error?: string;
 }

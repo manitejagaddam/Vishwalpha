@@ -10,6 +10,11 @@ export async function sendMessage(message: string, apiUrl: string): Promise<stri
       body: JSON.stringify({ message }),
     });
 
+    console.log(message);
+    console.log(response);
+    
+    
+
     if (!response.ok) {
       throw new Error(`API request failed: ${response.status} ${response.statusText}`);
     }
@@ -20,7 +25,7 @@ export async function sendMessage(message: string, apiUrl: string): Promise<stri
       throw new Error(data.error);
     }
 
-    return data.response || 'No response from server';
+    return data.answer || 'No response from server';
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`Failed to connect to chatbot service: ${error.message}`);
